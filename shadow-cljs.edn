@@ -13,9 +13,9 @@
 
         :modules
         {:main
-         {:entries [giggin.core]}}
+         {:entries [reactBikes.core]}}
 
         :devtools
-        {:after-load  giggin.core/main
+        {:after-load  reactBikes.core/main
          :http-root   "public"
          :http-port   3000}}}}

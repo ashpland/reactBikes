@@ -1,8 +1,8 @@
 {
-  "name": "Giggin",
+  "name": "ReactBikes",
   "version": "0.0.1",
-  "description": "Giggin - find a gig!",
-  "repository": "https://github.com/jacekschae/learn-reagent-course-files.git",
+  "description": "Find Mo'Bikes, on the web!",
+  "repository": "https://github.com/ashpland/reactBikes.git",
   "private": true,
   "scripts": {
     "dev": "shadow-cljs watch app",
