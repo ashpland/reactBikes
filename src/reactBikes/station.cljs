@@ -1,4 +1,4 @@
-(ns reactBikes.components.station
+(ns reactBikes.station
   (:require [reactBikes.state :as state]))
 
 (defn station
