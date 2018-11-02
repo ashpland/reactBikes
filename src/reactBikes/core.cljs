@@ -1,6 +1,6 @@
 (ns reactBikes.core
   (:require [reagent.core :as r]
-            [reactBikes.api :refer [convertJSON]]
+            [reactBikes.api :refer [getFromNetwork]]
             [reactBikes.station :refer [allStations]]))
 
 (defn header [] [:header [:h1 "ReactBikes"]])
@@ -8,10 +8,10 @@
 
 (defn app
   []
+  (getFromNetwork)
   [:div.container
    [header]
    [allStations]
-   [convertJSON]
    [footer]])
 
 (defn ^:export main

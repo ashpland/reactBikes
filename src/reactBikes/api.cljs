@@ -1,10 +1,8 @@
 (ns reactBikes.api
   (:require [reactBikes.state :as state]
-            [clojure.string :as str]))
-
-(def testJSON "{\"name\":\"0001 10th & Cambie\",\"coordinates\":\"49.262487, -123.114397\",\"total_slots\":52,\"free_slots\":32,\"avl_bikes\":20,\"operative\":true,\"style\":\"\"}")
-
-(def output (js->clj (.parse js/JSON testJSON)))
+            [clojure.string :as str]
+            [cljs-http.client :as http]
+            [clojure.core.async :as async]))
 
 (defn splitID
   [nameString]
@@ -15,20 +13,27 @@
 (defn splitCoordinates
   [coordinatesString]
   (if (string? coordinatesString)
-    (let [components (str/split coordinatesString #", " 2)]
+    (let [components (str/split coordinatesString #"," 2)]
       {:coordinates {:lat (js/parseFloat (components 0))
                      :lon (js/parseFloat (components 1))}})))
 
 (defn parseStation
-  [rawStation]
-  (merge (splitID (get rawStation "name"))
-         (splitCoordinates (get rawStation "coordinates"))
-         {:availableDocks (get rawStation "free_slots")
-          :availableBikes (get rawStation "avl_bikes")}))
+  [{:keys [name coordinates free_slots avl_bikes]}]
+  (merge (splitID name)
+         (splitCoordinates coordinates)
+         {:availableDocks free_slots
+          :availableBikes avl_bikes}))
 
-(def newStation (parseStation output))
+(defn updateStation
+  [s]
+  (swap! state/stations assoc (:id s) s))
 
-(defn convertJSON
+(defn updateStations
+  [newStations]
+  (doseq [s newStations] (updateStation (parseStation s))))
+
+(defn getFromNetwork
   []
-  (swap! state/stations assoc (newStation :id) newStation)
-  [:div])
+  (async/go
+    (let [response (async/<! (http/get "https://vancouver-ca.smoove.pro/api-public/stations"))]
+      (updateStations (:result (:body response))))))
