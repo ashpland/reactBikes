@@ -1,11 +1,15 @@
-(ns reactBikes.components.station)
+(ns reactBikes.components.station
+  (:require [reactBikes.state :as state]))
 
 (defn station
-  [stationData]
+  [{:keys [id stationName availableBikes availableDocks]}]
   [:div.station
-   {:key (str (stationData :id))}
-   [:p (stationData :stationName)]])
+   {:key (str id)}
+   [:p stationName]
+   [:ul
+    [:li (str "Bikes: " availableBikes)]
+    [:li (str "Docks: " availableDocks)]]])
 
-(defn displayAll
-  [stations]
-  (map #(station %) stations))
+(defn allStations
+  []
+  [:div#allStations (map #(station %) (vals @state/stations))])

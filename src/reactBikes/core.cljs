@@ -1,19 +1,17 @@
 (ns reactBikes.core
   (:require [reagent.core :as r]
-            [reactBikes.components.header :refer [header]]
-            [reactBikes.components.station :as station]
-            [reactBikes.state :as state]))
+            [reactBikes.components.station :refer [allStations]]))
 
-(defn newFoot
-  []
-  [:div "Hey"])
+(defn header [] [:header [:h1 "ReactBikes"]])
+
+(defn footer [] [:div "Footer"])
 
 (defn app
   []
   [:div.container
    [header]
-   (station/displayAll (vals @state/stations))
-   [newFoot]])
+   [allStations]
+   [footer]])
 
 (defn ^:export main
   []
