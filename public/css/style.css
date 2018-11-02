@@ -57,3 +57,15 @@ button:focus {
 }
 
 /* = reactBikes============================================================= */
+
+body {
+	background-color: #17181c;
+	color: #d8d5d1;
+	font-size: 20px;
+	font-family: sans-serif;
+	padding: 1em;
+}
+
+h1 {
+	font-size: 2em;
+}
