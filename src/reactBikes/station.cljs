@@ -10,6 +10,8 @@
     [:li (str "Bikes: " availableBikes)]
     [:li (str "Docks: " availableDocks)]]])
 
+(def stations (map #(station %) (sort-by :id (vals @state/stations))))
+
 (defn allStations
   []
-  [:div#allStations (map #(station %) (vals @state/stations))])
+  [:div#allStations stations])
