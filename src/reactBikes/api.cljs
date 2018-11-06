@@ -35,5 +35,5 @@
 (defn getFromNetwork
   []
   (async/go
-    (let [response (async/<! (http/get "https://vancouver-ca.smoove.pro/api-public/stations"))]
+    (let [response (async/<! (http/get "/stations.json"))]
       (updateStations (:result (:body response))))))
