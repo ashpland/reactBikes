@@ -1,5 +1,6 @@
 (ns reactBikes.api
   (:require [reactBikes.state :as state]
+            [reactBikes.location :refer [distance]]
             [clojure.string :as str]
             [cljs-http.client :as http]
             [clojure.core.async :as async]))
@@ -14,13 +15,18 @@
   [coordinatesString]
   (if (string? coordinatesString)
     (let [components (str/split coordinatesString #"," 2)]
-      {:coordinates {:lat (js/parseFloat (components 0))
-                     :lon (js/parseFloat (components 1))}})))
+      {:lat (js/parseFloat (components 0))
+       :lon (js/parseFloat (components 1))})))
+
+(defn getDistance
+  [coordinatesString location]
+  {:distance (distance 
+               (splitCoordinates coordinatesString) location)})
 
 (defn parseStation
-  [{:keys [name coordinates free_slots avl_bikes]}]
+  [{:keys [name coordinates free_slots avl_bikes]} location]
   (merge (splitID name)
-         (splitCoordinates coordinates)
+         (getDistance coordinates location)
          {:availableDocks free_slots
           :availableBikes avl_bikes}))
 
@@ -30,7 +36,8 @@
 
 (defn updateStations
   [newStations]
-  (doseq [s newStations] (updateStation (parseStation s))))
+  (let [l @state/location]
+    (doseq [s newStations] (updateStation (parseStation s l)))))
 
 (defn getFromNetwork
   []
